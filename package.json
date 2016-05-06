@@ -1,0 +1,29 @@
+{
+  "name": "fb-bot-framework",
+  "version": "0.1.0",
+  "description": "A node framework for Facebook Messenger Platform",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kinni/fb-bot-framework.git"
+  },
+  "keywords": [
+    "fb",
+    "facebook",
+    "messenger",
+    "messanger",
+    "bot",
+    "bots",
+    "framework"
+  ],
+  "author": "Kinni Mew",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.72.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "nock": "^8.0.0",
+    "sinon": "^1.17.4"
+  }
+}
