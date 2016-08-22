@@ -8,6 +8,7 @@ var request = require("request");
 
 const FB_MESSENGER_ENDPOINT = "https://graph.facebook.com/v2.6/me/messages";
 const FB_PROFILE_ENDPOINT = "https://graph.facebook.com/v2.6/";
+const FB_SETTINGS_ENDPOINT = "https://graph.facebook.com/v2.6/me/thread_settings";
 
 const NOTIFICATION_TYPE = {
     REGULAR: "REGULAR",
@@ -85,6 +86,41 @@ FBBotFramework.prototype.sendTextMessage = function (recipient, text, notificati
     var messageData = {text: text};
     this.send(recipient, messageData, notificationType, cb);
 };
+
+FBBotFramework.prototype.sendAudioAttachment = function (recipient, audioUrl, notificationType, cb) {
+    var messageData = {
+        attachment: {
+            type: "audio",
+            payload: {url: audioUrl}
+        }
+    };
+
+    this.send(recipient, messageData, notificationType, cb);
+};
+
+FBBotFramework.prototype.sendVideoAttachment = function (recipient, videoUrl, notificationType, cb) {
+    var messageData = {
+        attachment: {
+            type: "file",
+            payload: {url: videoUrl}
+        }
+    };
+
+    this.send(recipient, messageData, notificationType, cb);
+};
+
+FBBotFramework.prototype.sendFileAttachment = function (recipient, fileUrl, notificationType, cb) {
+    var messageData = {
+        attachment: {
+            type: "video",
+            payload: {url: fileUrl}
+        }
+    };
+
+    this.send(recipient, messageData, notificationType, cb);
+};
+
+// TODO: Audio, Video and File Upload
 
 FBBotFramework.prototype.sendImageMessage = function (recipient, imageUrl, notificationType, cb) {
     var messageData = {
@@ -202,12 +238,19 @@ FBBotFramework.prototype.middleware = function () {
                     // Extract senderID, i.e. recipient
                     var sender = event.sender.id;
 
+                    // Trigger onMessage Listener
                     if (event.message && event.message.text) {
                         bot.emit('message', sender, event.message.text);
                     }
 
+                    // Trigger onPostback Listener
                     if (event.postback && event.postback.payload) {
                         bot.emit('postback', sender, event.postback.payload);
+                    }
+
+                    // Trigger onAttachment Listener
+                    if (event.message && event.message.attachments) {
+                        bot.emit('attachment', sender, event.message.attachments);
                     }
 
                 });
@@ -215,6 +258,77 @@ FBBotFramework.prototype.middleware = function () {
 
         }
     };
+};
+
+
+FBBotFramework.prototype.setGreetingText = function (text, cb) {
+
+
+    var req = {
+        url: FB_SETTINGS_ENDPOINT,
+        qs: {access_token: this.page_token},
+        method: "POST",
+        json: {
+            "setting_type": "greeting",
+            "greeting": {
+                "text": text
+            }
+        }
+    };
+
+    request(req, function (err, res, body) {
+        if (cb) {
+            if (err) return cb(err);
+            if (body.error) return cb(body.error);
+            cb(null, body);
+        }
+    });
+};
+
+FBBotFramework.prototype.setGetStartedButton = function (payload, cb) {
+    var req = {
+        url: FB_SETTINGS_ENDPOINT,
+        qs: {access_token: this.page_token},
+        method: "POST",
+        json: {
+            "setting_type": "call_to_actions",
+            "thread_state": "new_thread",
+            "call_to_actions": [
+                {
+                    "payload": payload
+                }
+            ]
+        }
+    };
+
+    request(req, function (err, res, body) {
+        if (cb) {
+            if (err) return cb(err);
+            if (body.error) return cb(body.error);
+            cb(null, body);
+        }
+    });
+};
+
+FBBotFramework.prototype.setPersistentMenu = function (menuButtons, cb) {
+    var req = {
+        url: FB_SETTINGS_ENDPOINT,
+        qs: {access_token: this.page_token},
+        method: "POST",
+        json: {
+            "setting_type": "call_to_actions",
+            "thread_state": "existing_thread",
+            "call_to_actions": menuButtons
+        }
+    };
+
+    request(req, function (err, res, body) {
+        if (cb) {
+            if (err) return cb(err);
+            if (body.error) return cb(body.error);
+            cb(null, body);
+        }
+    });
 };
 
 module.exports = FBBotFramework;

@@ -78,6 +78,105 @@ describe('Send API', function () {
 
     });
 
+    it('should send audio attachment', function (done) {
+
+        var audioUrl = "https://petersapparel.com/img/shirt.png";
+
+        var payload = {
+            "recipient": {
+                "id": recipient
+            },
+            "message": {
+                "attachment": {
+                    "type": "audio",
+                    "payload": {
+                        "url": audioUrl
+                    }
+                }
+            }
+        };
+
+
+        nock('https://graph.facebook.com')
+            .post('/v2.6/me/messages', payload)
+            .query({access_token: bot.page_token})
+            .reply(200, dummyResponse);
+
+        bot.sendAudioAttachment(recipient, audioUrl, function (err, result) {
+            expect(err).to.be.null;
+            expect(result).to.deep.equal(dummyResponse);
+            done();
+
+        });
+
+    });
+
+    it('should send video attachment', function (done) {
+
+        var videoUrl = "https://petersapparel.com/bin/clip.mp4";
+
+        var payload = {
+            "recipient": {
+                "id": recipient
+            },
+            "message": {
+                "attachment": {
+                    "type": "audio",
+                    "payload": {
+                        "url": videoUrl
+                    }
+                }
+            }
+        };
+
+
+        nock('https://graph.facebook.com')
+            .post('/v2.6/me/messages', payload)
+            .query({access_token: bot.page_token})
+            .reply(200, dummyResponse);
+
+        bot.sendAudioAttachment(recipient, videoUrl, function (err, result) {
+            expect(err).to.be.null;
+            expect(result).to.deep.equal(dummyResponse);
+            done();
+
+        });
+
+    });
+
+    it('should send file attachment', function (done) {
+
+        var fileUrl = "https://petersapparel.com/bin/receipt.pdf";
+
+        var payload = {
+            "recipient": {
+                "id": recipient
+            },
+            "message": {
+                "attachment": {
+                    "type": "audio",
+                    "payload": {
+                        "url": fileUrl
+                    }
+                }
+            }
+        };
+
+
+        nock('https://graph.facebook.com')
+            .post('/v2.6/me/messages', payload)
+            .query({access_token: bot.page_token})
+            .reply(200, dummyResponse);
+
+        bot.sendAudioAttachment(recipient, fileUrl, function (err, result) {
+            expect(err).to.be.null;
+            expect(result).to.deep.equal(dummyResponse);
+            done();
+
+        });
+
+    });
+
     it('should send button message', function (done) {
 
         var text = "What do you want to do next?";
