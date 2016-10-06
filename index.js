@@ -331,4 +331,26 @@ FBBotFramework.prototype.setPersistentMenu = function (menuButtons, cb) {
     });
 };
 
+
+FBBotFramework.prototype.sendQuickReplies = function (recipient, text, replies, notificationType, cb) {
+    var messageData = {
+        text: text,
+        quick_replies: replies
+    };
+
+    this.send(recipient, messageData, notificationType, cb);
+
+};
+
+FBBotFramework.prototype.sendLocationRequest = function (recipient, text, notificationType, cb) {
+    var messageData = {
+        text: text,
+        quick_replies: [{content_type: "location"}]
+    };
+
+    this.send(recipient, messageData, notificationType, cb);
+
+};
+
+
 module.exports = FBBotFramework;
