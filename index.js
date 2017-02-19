@@ -237,20 +237,25 @@ FBBotFramework.prototype.middleware = function () {
 
                     // Extract senderID, i.e. recipient
                     var sender = event.sender.id;
+                    
+                    // Trigger quickyReply Listener
+                    if (event.message && event.message.quick_reply) {
+                        return bot.emit('quickreply', sender, event.message.quick_reply.payload);
+                    }
 
                     // Trigger onMessage Listener
                     if (event.message && event.message.text) {
-                        bot.emit('message', sender, event.message.text);
+                        return bot.emit('message', sender, event.message.text);
                     }
 
                     // Trigger onPostback Listener
                     if (event.postback && event.postback.payload) {
-                        bot.emit('postback', sender, event.postback.payload);
+                        return bot.emit('postback', sender, event.postback.payload);
                     }
 
                     // Trigger onAttachment Listener
                     if (event.message && event.message.attachments) {
-                        bot.emit('attachment', sender, event.message.attachments);
+                        return bot.emit('attachment', sender, event.message.attachments);
                     }
 
                 });

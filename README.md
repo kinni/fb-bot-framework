@@ -33,7 +33,27 @@ app.use('/webhook', bot.middleware());
 
 // Setup listener for incoming messages
 bot.on('message', function(userId, message){
-	bot.sendTextMessage(userId, "Echo Message:" + message);
+    // bot.sendTextMessage(userId, "Echo Message:" + message);
+	
+    // Send quick replies
+    var replies = [
+        {
+            "content_type": "text",
+            "title": "Good",
+            "payload": "thumbs_up"
+        },
+        {
+            "content_type": "text",
+            "title": "Bad",
+            "payload": "thumbs_down"
+        }
+    ];
+    bot.sendQuickReplies(userId, message, replies);
+});
+
+// Setup listener for quick reply messages
+bot.on('quickreply', function(userId, payload){
+	bot.sendTextMessage(userId, "payload:" + payload);
 });
 
 // Config the Get Started Button and register a callback
@@ -79,6 +99,12 @@ Triggered when an user sends a typed message to the bot.
 ####  ```bot.on("postback", function(userId, payload))```
 
 Triggered when an user clicks a button which will send a postback message.
+* ```userId``` - String: The Facebook Id of the sender.
+* ```payload``` - String: The payload associated with the button clicked by the user.
+
+####  ```bot.on("quickreply", function(userId, payload))```
+
+Triggered when an user clicks a quick reply button..
 * ```userId``` - String: The Facebook Id of the sender.
 * ```payload``` - String: The payload associated with the button clicked by the user.
 
@@ -302,6 +328,42 @@ var receipt = {
 };
 
 bot.sendReceiptMessage(recipient, receipt);
+```
+
+#### ```bot.sendLocationRequest(userId, text, notificationType, cb)```
+Send a location request message to a specific user.
+* ```userId``` - The recipient's Facebook Id
+* ```text``` - The prompt text ask for location
+* ```notificationType``` - Optional, push notification type: REGULAR (default), SILENT_PUSH, NO_PUSH
+* ```cb``` - Optional, callback with arguments of ```err``` and ```result```.
+
+#### ```bot.sendQuickReplies(userId, text, replies, notificationType, cb)```
+Send quick reply message to a specific user.
+* ```userId``` - The recipient's Facebook Id
+* ```text``` - The title of the message
+* ```replies``` - The quick reply buttons
+* ```notificationType``` - Optional, push notification type: REGULAR (default), SILENT_PUSH, NO_PUSH
+* ```cb``` - Optional, callback with arguments of ```err``` and ```result```.
+
+```js
+var replies = [
+    {
+        "content_type": "text",
+        "title": "Good",
+        "payload": "thumbs_up"
+    },
+    {
+        "content_type": "text",
+        "title": "Bad",
+        "payload": "thumbs_down"
+    }
+];
+bot.sendQuickReplies(userId, message, replies);
+
+bot.on('quickreply', function (userId, payload) {
+    console.log("payload =" + payload);
+});
+
 ```
 
 #### ```bot.getUserProfile(userId, cb)```
