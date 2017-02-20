@@ -1,6 +1,6 @@
 {
   "name": "fb-bot-framework",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "A node framework for Facebook Messenger Platform",
   "main": "index.js",
   "repository": {

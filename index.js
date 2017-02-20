@@ -237,7 +237,12 @@ FBBotFramework.prototype.middleware = function () {
 
                     // Extract senderID, i.e. recipient
                     var sender = event.sender.id;
-                    
+
+                    // Trigger onEcho Listener
+                    if (event.message && event.message.is_echo) {
+                        return bot.emit('echo', event.recipient.id, event.message.text);
+                    }
+
                     // Trigger quickyReply Listener
                     if (event.message && event.message.quick_reply) {
                         return bot.emit('quickreply', sender, event.message.quick_reply.payload);
@@ -245,17 +250,17 @@ FBBotFramework.prototype.middleware = function () {
 
                     // Trigger onMessage Listener
                     if (event.message && event.message.text) {
-                        return bot.emit('message', sender, event.message.text);
+                        bot.emit('message', sender, event.message.text);
                     }
 
                     // Trigger onPostback Listener
                     if (event.postback && event.postback.payload) {
-                        return bot.emit('postback', sender, event.postback.payload);
+                        bot.emit('postback', sender, event.postback.payload);
                     }
 
                     // Trigger onAttachment Listener
                     if (event.message && event.message.attachments) {
-                        return bot.emit('attachment', sender, event.message.attachments);
+                        bot.emit('attachment', sender, event.message.attachments);
                     }
 
                 });
@@ -354,6 +359,24 @@ FBBotFramework.prototype.sendLocationRequest = function (recipient, text, notifi
     };
 
     this.send(recipient, messageData, notificationType, cb);
+
+};
+
+FBBotFramework.prototype.sendListMessage = function (recipient, elements, notificationType, cb) {
+
+    var messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "list",
+                "top_element_style": "compact",
+                "elements": elements
+            }
+        }
+    };
+
+    this.send(recipient, messageData, notificationType, cb);
+
 
 };
 
