@@ -80,7 +80,42 @@ FBBotFramework.prototype.send = function (recipient, messageData, notificationTy
     });
 
 };
+FBBotFramework.prototype.sendAction = function (recipient, action, cb) {
 
+
+    var req = {
+        url: FB_MESSENGER_ENDPOINT,
+        qs: {access_token: this.page_token},
+        method: "POST",
+        json: {
+            recipient: {id: recipient},
+            sender_action: action,
+        }
+    };
+    request(req, function (err, res, body) {
+        if (cb) {
+            if (err) return cb(err);
+            if (body.error) return cb(body.error);
+            cb(null, body);
+        }
+    });
+
+};
+
+FBBotFramework.prototype.sendActionTypeingOn =function(recipient,cb)
+{
+    console.log("here")
+    this.sendAction(recipient,"typing_on",cb);
+}
+
+FBBotFramework.prototype.sendActionTypeingOff =function(recipient,cb)
+{
+    this.sendAction(recipient,"typing_off",cb);
+}
+FBBotFramework.prototype.sendActionMarkseen =function(recipient,cb)
+{
+    this.sendAction(recipient,"mark_seen",cb);
+}
 
 FBBotFramework.prototype.sendTextMessage = function (recipient, text, notificationType, cb) {
     var messageData = {text: text};
@@ -250,7 +285,15 @@ FBBotFramework.prototype.middleware = function () {
 
                     // Trigger onMessage Listener
                     if (event.message && event.message.text) {
-                        bot.emit('message', sender, event.message.text);
+                        //handle nlp key
+                         if(event.message.nlp !== undefined)
+                            {
+                                bot.emit('message', sender, event.message.text,event.message.nlp);
+                            }
+                            else
+                            {
+                                bot.emit('message', sender, event.message.text);
+                            }
                     }
 
                     // Trigger onPostback Listener
