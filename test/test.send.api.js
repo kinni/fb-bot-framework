@@ -40,7 +40,6 @@ describe('Send API', function () {
             expect(err).to.be.null;
             expect(result).to.deep.equal(dummyResponse);
             done();
-
         });
 
     });
@@ -397,6 +396,31 @@ describe('Send API', function () {
             .reply(200, response);
 
         bot.getUserProfile(recipient, function (err, profile) {
+            expect(err).to.be.null;
+            expect(profile).deep.equal(response);
+            done();
+        });
+
+    });
+
+    it('should return bot\'s profile', function (done) {
+
+        var response = {
+            "data": [
+                {
+                    "get_started": {
+                        "payload": "GET_STARTED"
+                    }
+                }
+            ]
+        };
+
+        nock('https://graph.facebook.com')
+            .get('/v2.6/messenger_profile')
+            .query({fields: 'get_started,greeting', access_token: bot.page_token})
+            .reply(200, response);
+
+        bot.getBotProfile(['get_started', 'greeting'], function (err, profile) {
             expect(err).to.be.null;
             expect(profile).deep.equal(response);
             done();

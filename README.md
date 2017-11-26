@@ -478,3 +478,9 @@ bot.getUserProfile(userId, function (err, profile) {
     console.log(profile);
 });
 ```
+
+#### ```bot.getBotProfile(fields, cb)```
+Get the Messenger Profile of your bot.
+See detailed fields available in the [Facebook Profile API.](https://developers.facebook.com/docs/messenger-platform/reference/messenger-profile-api#profile_properties)
+* ```fields``` - Array of fields in string of properties requested
+* ```cb``` - callback with arguments of ```err``` and ```profile```.
