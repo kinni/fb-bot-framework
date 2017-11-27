@@ -207,6 +207,26 @@ FBBotFramework.prototype.getUserProfile = function (userId, cb) {
     });
 };
 
+// Bot Profile
+FBBotFramework.prototype.getBotProfile = function (fields, cb) {
+
+    var req = {
+        method: 'GET',
+        uri: FB_PROFILE_ENDPOINT + 'messenger_profile',
+        qs: {
+            fields: fields.join(),
+            access_token: this.page_token
+        },
+        json: true
+    };
+
+    request(req, function (err, res, body) {
+      if (err) return cb(err);
+      if (body.error) return cb(body.err);
+      cb(null, body);
+    })
+};
+
 // Middleware
 FBBotFramework.prototype.middleware = function () {
 
