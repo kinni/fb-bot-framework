@@ -145,6 +145,36 @@ var menuButtons = [
 bot.setPersistentMenu(menuButtons);
 ```
 
+#### ```bot.sendMessage(userId, message, notificationType, cb)```
+Send a custom message to a specific user.
+* ```userId``` - The recipient's Facebook Id
+* ```message``` - The custom message object. See [Facebook send API](https://developers.facebook.com/docs/messenger-platform/reference/send-api#message) for more detailed format. 
+* ```notificationType``` - Optional, push notification type: REGULAR (default), SILENT_PUSH, NO_PUSH
+* ```cb``` - Optional, callback with arguments of ```err``` and ```result```.
+
+```js
+var message = {
+    quick_replies: [
+        {
+            "content_type": "text",
+            "title": "Good",
+            "payload": "thumbs_up"
+        },
+        {
+            "content_type": "text",
+            "title": "Bad",
+            "payload": "thumbs_down"
+        }],
+    attachment: {
+        type: "image",
+        payload: {
+            url: "http://placehold.it/240x240&text=helloworld"
+        }
+    }
+};
+bot.sendMessage(recipient, message);
+```
+
 #### ```bot.sendTextMessage(userId, text, notificationType, cb)```
 Send a text message to a specific user.
 * ```userId``` - The recipient's Facebook Id

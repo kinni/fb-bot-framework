@@ -81,6 +81,10 @@ FBBotFramework.prototype.send = function (recipient, messageData, notificationTy
 
 };
 
+FBBotFramework.prototype.sendMessage = function (recipient, message, notificationType, cb) {
+    this.send(recipient, message, notificationType, cb);
+};
+
 
 FBBotFramework.prototype.sendTextMessage = function (recipient, text, notificationType, cb) {
     var messageData = {text: text};
