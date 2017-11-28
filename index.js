@@ -52,7 +52,7 @@ FBBotFramework.prototype.verify = function (req, res) {
 
 // Send API, Details please visit https://developers.facebook.com/docs/messenger-platform/send-api-reference#request
 
-FBBotFramework.prototype.send = function (recipient, messageData, notificationType, cb) {
+FBBotFramework.prototype.sendMessage = function (recipient, messageData, notificationType, cb) {
     notificationType = notificationType || NOTIFICATION_TYPE.REGULAR;
 
     if (typeof notificationType === 'function') {
@@ -81,10 +81,9 @@ FBBotFramework.prototype.send = function (recipient, messageData, notificationTy
 
 };
 
-
 FBBotFramework.prototype.sendTextMessage = function (recipient, text, notificationType, cb) {
     var messageData = {text: text};
-    this.send(recipient, messageData, notificationType, cb);
+    this.sendMessage(recipient, messageData, notificationType, cb);
 };
 
 FBBotFramework.prototype.sendAudioAttachment = function (recipient, audioUrl, notificationType, cb) {
@@ -95,7 +94,7 @@ FBBotFramework.prototype.sendAudioAttachment = function (recipient, audioUrl, no
         }
     };
 
-    this.send(recipient, messageData, notificationType, cb);
+    this.sendMessage(recipient, messageData, notificationType, cb);
 };
 
 FBBotFramework.prototype.sendVideoAttachment = function (recipient, videoUrl, notificationType, cb) {
@@ -106,7 +105,7 @@ FBBotFramework.prototype.sendVideoAttachment = function (recipient, videoUrl, no
         }
     };
 
-    this.send(recipient, messageData, notificationType, cb);
+    this.sendMessage(recipient, messageData, notificationType, cb);
 };
 
 FBBotFramework.prototype.sendFileAttachment = function (recipient, fileUrl, notificationType, cb) {
@@ -117,7 +116,7 @@ FBBotFramework.prototype.sendFileAttachment = function (recipient, fileUrl, noti
         }
     };
 
-    this.send(recipient, messageData, notificationType, cb);
+    this.sendMessage(recipient, messageData, notificationType, cb);
 };
 
 // TODO: Audio, Video and File Upload
@@ -130,7 +129,7 @@ FBBotFramework.prototype.sendImageMessage = function (recipient, imageUrl, notif
         }
     };
 
-    this.send(recipient, messageData, notificationType, cb);
+    this.sendMessage(recipient, messageData, notificationType, cb);
 };
 
 FBBotFramework.prototype.sendButtonMessage = function (recipient, text, buttons, notificationType, cb) {
@@ -146,7 +145,7 @@ FBBotFramework.prototype.sendButtonMessage = function (recipient, text, buttons,
         }
     };
 
-    this.send(recipient, messageData, notificationType, cb);
+    this.sendMessage(recipient, messageData, notificationType, cb);
 };
 
 
@@ -168,7 +167,7 @@ FBBotFramework.prototype.sendBubbleMessage = FBBotFramework.prototype.sendGeneri
         }
     };
 
-    this.send(recipient, messageData, notificationType, cb);
+    this.sendMessage(recipient, messageData, notificationType, cb);
 
 };
 
@@ -185,7 +184,7 @@ FBBotFramework.prototype.sendReceiptMessage = function (recipient, receipt, noti
         }
     };
 
-    this.send(recipient, messageData, notificationType, cb);
+    this.sendMessage(recipient, messageData, notificationType, cb);
 };
 
 FBBotFramework.prototype.getUserProfile = function (userId, cb) {
@@ -368,7 +367,7 @@ FBBotFramework.prototype.sendQuickReplies = function (recipient, text, replies, 
         quick_replies: replies
     };
 
-    this.send(recipient, messageData, notificationType, cb);
+    this.sendMessage(recipient, messageData, notificationType, cb);
 
 };
 
@@ -378,7 +377,7 @@ FBBotFramework.prototype.sendLocationRequest = function (recipient, text, notifi
         quick_replies: [{content_type: "location"}]
     };
 
-    this.send(recipient, messageData, notificationType, cb);
+    this.sendMessage(recipient, messageData, notificationType, cb);
 
 };
 
@@ -395,7 +394,7 @@ FBBotFramework.prototype.sendListMessage = function (recipient, elements, notifi
         }
     };
 
-    this.send(recipient, messageData, notificationType, cb);
+    this.sendMessage(recipient, messageData, notificationType, cb);
 
 
 };

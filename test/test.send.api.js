@@ -428,4 +428,46 @@ describe('Send API', function () {
 
     });
 
+    it('should send custom message', function (done) {
+
+        var message = {
+            quick_replies: [
+                {
+                    "content_type": "text",
+                    "title": "Good",
+                    "payload": "thumbs_up"
+                },
+                {
+                    "content_type": "text",
+                    "title": "Bad",
+                    "payload": "thumbs_down"
+                }],
+            attachment: {
+                type: "image",
+                payload: {
+                    url: "http://placehold.it/240x240&text=helloworld"
+                }
+            }
+        };
+
+        var payload = {
+            recipient: {
+                id: recipient
+            },
+            message: message
+        };
+
+        nock('https://graph.facebook.com')
+            .post('/v2.6/me/messages', payload)
+            .query({access_token: bot.page_token})
+            .reply(200, dummyResponse);
+
+        bot.sendMessage(recipient, message, function (err, result) {
+            expect(err).to.be.null;
+            expect(result).to.deep.equal(dummyResponse);
+            done();
+        });
+
+    })
+
 });
